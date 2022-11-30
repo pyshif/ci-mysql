@@ -9,6 +9,10 @@ inputs:
     description: "mysql port"
     required: false
     default: "3306"
+  host:
+    description: "mysql host"
+    required: false
+    default: "localhost"
   name:
     description: "database name"
     required: true
