@@ -1,0 +1,23 @@
+name: "Active MySQL Service"
+description: "Active Ubuntu-Latest MySQL Service"
+author: "Chen Po Yu"
+runs:
+  using: "node16"
+  main: "index.js"
+inputs:
+  port:
+    description: "mysql port"
+    required: false
+    default: "3306"
+  name:
+    description: "database name"
+    required: true
+  user:
+    description: "database user"
+    required: true
+  password:
+    description: "database user password"
+    required: true
+  source:
+    description: ".sql"
+    required: true
