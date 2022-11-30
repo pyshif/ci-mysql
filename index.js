@@ -22,21 +22,38 @@ const { execSync } = require('child_process');
         // core.info(`source :>> ${DB.source}`);
 
         // active mysql 5.7 in ubuntu-lastest
-        execSync(`sudo /etc/init.d/mysql start --port=${DB.port}`);
+        try {
+            const res = execSync(`sudo /etc/init.d/mysql start --port=${DB.port}`);
+            core.info(`active mysql :>> ${res}`);
+        } catch (error) {
+            core.error(`active mysql error :>> ${error.message}`);
+            core.setFailed(error.message);
+        }
 
         // import database by source
-        execSync(`mysql -P${DB.port} -h${DB.host} -uroot -proot -e "source ${DB.source}"`);
+        try {
+            const res = execSync(`mysql -P${DB.port} -h${DB.host} -uroot -proot -e "source ${DB.source}"`);
+            core.info(`import database :>> ${res}`);
+        } catch (error) {
+            core.error(`import database error :>> ${error.message}`);
+            core.setFailed(error.message);
+        }
 
         // create user, and grant permission
-        execSync(`mysql -P${DB.port} -h${DB.host} -uroot -proot -e "CREATE USER '${DB.user}'@'${DB.host}' IDENTIFIED BY '${DB.password}'"`);
-        execSync(`mysql -P${DB.port} -h${DB.host} -uroot -proot -e "GRANT ALL ON * TO '${DB.user}'@'${DB.host}'" ${DB.name}`);
+        try {
+            const res = execSync(`mysql -P${DB.port} -h${DB.host} -uroot -proot -e "CREATE USER '${DB.user}'@'${DB.host}' IDENTIFIED BY '${DB.password}'"`);
+            core.info(`create user :>> ${res}`);
+        } catch (error) {
+            core.error(`create user error :>> ${error.message}`);
+            core.setFailed(error.message);
+        }
 
-        // print databases, and users
-
-        // try {
-        //     core.notice("Start activing mysql...");
-        // } catch (error) {
-        //     core.setFailed(error.message);
-        // }
+        try {
+            const res = execSync(`mysql -P${DB.port} -h${DB.host} -uroot -proot -e "GRANT ALL ON * TO '${DB.user}'@'${DB.host}'" ${DB.name}`);
+            core.info(`grant permission :>> ${res}`);
+        } catch (error) {
+            core.error(`grant permission error :>> ${error.message}`);
+            core.setFailed(error.message);
+        }
     }
 )();
